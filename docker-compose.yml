@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_DATABASE: "${DB_NAME}"       # MySQL database name
+      MYSQL_USER: "${DB_USER}"           # MySQL user
+      MYSQL_PASSWORD: "${DB_PASSWORD}"   # MySQL user password
+      MYSQL_ROOT_PASSWORD: "welcome@1"   # MySQL root password
+    command: --log-bin-trust-function-creators=1
+    cap_add:
+      - SYS_NICE
+    ports:
+      - "${DB_PORT}:${DB_PORT}"          # Port mapping for MySQL
+    volumes:
+      - local-db:/var/lib/mysql          # Volume to persist data
+      - ./db/seed/:/docker-entrypoint-initdb.d/  # For database seeding
+
+volumes:
+  local-db:
