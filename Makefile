@@ -41,3 +41,8 @@ migrate-up: migrate-up-dbmate
 # roll back the most recent migration
 migrate-down:
 	dbmate --url "${DB_PROTOCOL}://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}${DB_OPTIONS}" down
+
+test: unit-test
+
+unit-test:
+	go test -tags=jsoniter -v ./...
