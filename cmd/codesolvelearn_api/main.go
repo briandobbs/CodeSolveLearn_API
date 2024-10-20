@@ -3,6 +3,7 @@ package main
 import (
 	"CodeSolveLearn_API/controller"
 	"CodeSolveLearn_API/db"
+	"CodeSolveLearn_API/service"
 	"github.com/gin-gonic/gin"
 	"log"
 	"os"
@@ -21,11 +22,20 @@ func main() {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 
-	// Initialize the Gin router
+	// Initialize services
+	articleService := service.NewArticleService(database)
+	authorService := service.NewAuthorService(database)
+
+	// Initialize controllers
+	articleController := controller.NewArticleController(articleService)
+	authorController := controller.NewAuthorController(authorService)
+
+	// Initialize the router
 	router := gin.Default()
 
-	// Define the routes
-	router.GET("/articles", controller.GetAllArticles(database))
+	// Define routes
+	router.GET("/articles", articleController.GetArticles)
+	router.GET("/authors", authorController.GetAuthors)
 
 	// Start the server
 	router.Run(":9080")
