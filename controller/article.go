@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"CodeSolveLearn_API/models"
 	"CodeSolveLearn_API/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -24,4 +25,28 @@ func (ac *ArticleController) GetArticles(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, articles)
+}
+
+func (ac *ArticleController) GetArticle(c *gin.Context) {
+	id := c.Param("id")
+	article, err := ac.articleService.GetArticleByID(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, article)
+}
+
+func (ac *ArticleController) CreateArticle(c *gin.Context) {
+	var article models.Article
+	if err := c.ShouldBindJSON(&article); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	createdArticle, err := ac.articleService.CreateArticle(article)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusCreated, createdArticle)
 }

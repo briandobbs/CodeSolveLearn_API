@@ -1,16 +1,16 @@
 package models
 
 import (
-	"gorm.io/gorm"
+	"time"
 )
 
 type Article struct {
-	ID          uint   `gorm:"primaryKey"`
-	Title       string `gorm:"size:255;not null"`
-	Description string `gorm:"type:text"`
-	Body        string `gorm:"type:text;not null"`
-	AuthorID    uint   // Foreign key linking to Author
-	Author      Author `gorm:"foreignKey:AuthorID"` // GORM will automatically join these
-	CreatedAt   gorm.DeletedAt
-	UpdatedAt   gorm.DeletedAt
+	ID          uint   `json:"id" gorm:"primaryKey"`
+	Title       string `json:"title" gorm:"size:255;not null"`
+	Description string `json:"description" gorm:"type:text"`
+	Body        string `json:"body" gorm:"type:text;not null"`
+	AuthorID    uint   `json:"author_id" gorm:"not null"`
+	Author      Author `gorm:"foreignKey:AuthorID"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
